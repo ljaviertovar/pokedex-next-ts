@@ -26,7 +26,7 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
 								{pokemon.name}
 							</Text>
 							<Button color='gradient' ghost>
-								Save to favourites
+								Save to favorites
 							</Button>
 						</Card.Header>
 						<Card.Body>

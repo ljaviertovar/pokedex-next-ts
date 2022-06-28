@@ -1,1 +1,2 @@
-export * from "./darktheme"
+import { darkTheme } from "./darktheme"
+export { darkTheme }
