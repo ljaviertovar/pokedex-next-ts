@@ -4,8 +4,6 @@ import { useTheme, Text, Spacer } from "@nextui-org/react"
 const Navbar = () => {
 	const { theme } = useTheme()
 
-	console.log({ theme })
-
 	return (
 		<div
 			style={{
