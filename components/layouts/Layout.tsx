@@ -8,6 +8,8 @@ interface Props {
 	children: JSX.Element | JSX.Element[]
 }
 
+const origin = typeof window !== "undefined" ? window.location.origin : ""
+
 const Layout: FC<Props> = ({ children, title }) => {
 	return (
 		<>
@@ -16,6 +18,10 @@ const Layout: FC<Props> = ({ children, title }) => {
 				<meta name='author' content='Javier Tovar' />
 				<meta name='description' content='Information about Pokémons' />
 				<meta name='keywords' content='pokémon, pokedex' />
+
+				<meta property='og:title' content={`Information about ${title}`} />
+				<meta property='og:description' content={`Page about ${title}`} />
+				<meta property='og:image' content={`${origin}/img/banner.png`} />
 			</Head>
 
 			<Navbar />

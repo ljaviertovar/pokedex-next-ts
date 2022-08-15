@@ -1,17 +1,20 @@
-import { useState } from "react"
-import { NextPage, GetStaticPaths, GetStaticProps } from "next"
-import { Layout } from "../../components/layouts"
+import { Button, Card, Container, Grid, Text } from "@nextui-org/react"
 import confetti from "canvas-confetti"
+import { GetStaticPaths, GetStaticProps, NextPage } from "next"
+import Image from "next/image"
+import { useState } from "react"
 
-import { Pokemon } from "../../ts/interfaces"
-import { Button, Card, Container, Grid, Image, Text } from "@nextui-org/react"
-import { getPokemonInfo, localPokemons } from "../../utils"
+import pokeApi from "../../../api/pokeApi"
+import { Layout } from "../../../components/layouts"
+import { ListPokemons } from "../../../ts/interfaces"
+import { Pokemon } from "../../../ts/interfaces/pokemon.interface"
+import { localPokemons, getPokemonInfo } from "../../../utils"
 
 interface Props {
 	pokemon: Pokemon
 }
 
-const PokemonPage: NextPage<Props> = ({ pokemon }) => {
+const PokemonByNamePage: NextPage<Props> = ({ pokemon }) => {
 	const [isInFavorites, setIsInFavorites] = useState(localPokemons.existInFavorites(pokemon.id))
 
 	const onToggleFavorites = () => {
@@ -69,21 +72,23 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
 }
 
 export const getStaticPaths: GetStaticPaths = async ctx => {
-	const allIdsPokemons = [...Array(151)].map((_value, index) => `${index + 1}`)
+	const { data } = await pokeApi.get<ListPokemons>("/pokemon?limit=151")
+	const pokemonNames: string[] = data.results.map(poke => poke.name)
 
 	return {
-		paths: allIdsPokemons.map(id => ({ params: { id } })),
+		paths: pokemonNames.map(name => ({ params: { name } })),
 		fallback: false,
 	}
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-	const { id } = params as { id: string }
+	const { name } = params as { name: string }
+
 	return {
 		props: {
-			pokemon: await getPokemonInfo(id),
+			pokemon: await getPokemonInfo(name),
 		},
 	}
 }
 
-export default PokemonPage
+export default PokemonByNamePage
